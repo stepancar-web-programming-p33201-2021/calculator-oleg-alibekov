@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 import Wrapper from "./components/Wrapper";
 import Screen from "./components/Screen";
@@ -6,7 +6,7 @@ import ButtonBox from "./components/ButtonBox";
 import Button from "./components/Button";
 
 const btnValues = [
-    ["C", "+-", "%", "/"],
+    ["C", "^", "%", "/"],
     [7, 8, 9, "X"],
     [4, 5, 6, "-"],
     [1, 2, 3, "+"],
@@ -65,13 +65,15 @@ const App = () => {
     const equalsClickHandler = () => {
         if (calc.sign && calc.num) {
             const math = (a, b, sign) =>
-                sign === "+"
-                    ? a + b
-                    : sign === "-"
-                        ? a - b
-                        : sign === "X"
-                            ? a * b
-                            : a / b;
+                sign === "^"
+                    ? Math.pow(a, b) :
+                    sign === "+"
+                        ? a + b
+                        : sign === "-"
+                            ? a - b
+                            : sign === "X"
+                                ? a * b
+                                : a / b;
 
             setCalc({
                 ...calc,
@@ -89,15 +91,6 @@ const App = () => {
                 num: 0,
             });
         }
-    };
-
-    const invertClickHandler = () => {
-        setCalc({
-            ...calc,
-            num: calc.num ? toLocaleString(removeSpaces(calc.num) * -1) : 0,
-            res: calc.res ? toLocaleString(removeSpaces(calc.res) * -1) : 0,
-            sign: "",
-        });
     };
 
     const percentClickHandler = () => {
@@ -122,7 +115,7 @@ const App = () => {
 
     return (
         <Wrapper>
-            <Screen value={calc.num ? calc.num : calc.res} />
+            <Screen value={calc.num ? calc.num : calc.res}/>
             <ButtonBox>
                 {btnValues.flat().map((btn, i) => {
                     return (
@@ -133,8 +126,8 @@ const App = () => {
                             onClick={
                                 btn === "C"
                                     ? resetClickHandler
-                                    : btn === "+-"
-                                        ? invertClickHandler
+                                    : btn === "^"
+                                        ? signClickHandler
                                         : btn === "%"
                                             ? percentClickHandler
                                             : btn === "="
