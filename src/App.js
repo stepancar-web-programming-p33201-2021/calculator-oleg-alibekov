@@ -27,10 +27,10 @@ const App = () => {
         res: 0,
     });
 
-
     const numClickHandler = (e) => {
         e.preventDefault();
-        const value = e.target.innerHTML;
+
+        const value = e.type === 'click' ? e.target.innerHTML : e.key;
 
         if (removeSpaces(calc.num).length < 16) {
             setCalc({
@@ -120,27 +120,14 @@ const App = () => {
         <Wrapper>
             <form>
                 <label>
-                    <input className="screen" type="text" name="name" value={calc.num ? calc.num : calc.res}
+                    <input className="screen" type="text" name="name" tabIndex="-1"
+                           value={calc.num ? calc.num : calc.res}
                            onKeyDown={((e) => {
                                e.preventDefault();
-                               console.log(e.key);
                                const value = e.key;
-
                                if (!isNaN(value)) {
-                                   if (removeSpaces(calc.num).length < 16) {
-                                       setCalc({
-                                           ...calc,
-                                           num:
-                                               calc.num === 0 && value === "0"
-                                                   ? "0"
-                                                   : removeSpaces(calc.num) % 1 === 0
-                                                       ? toLocaleString(Number(removeSpaces(calc.num + value)))
-                                                       : toLocaleString(calc.num + value),
-                                           res: !calc.sign ? 0 : calc.res,
-                                       });
-                                   }
+                                   numClickHandler(e)
                                }
-
                            })}/>
                 </label>
             </form>
