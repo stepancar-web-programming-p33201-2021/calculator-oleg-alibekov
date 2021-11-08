@@ -18,10 +18,9 @@ const toLocaleString = (num) =>
 
 const removeSpaces = (num) => num.toString().replace(/\s/g, "");
 
-
 const App = () => {
 
-    let [calc, setCalc] = useState({
+    const [calc, setCalc] = useState({
         sign: "",
         num: 0,
         res: 0,
@@ -116,6 +115,29 @@ const App = () => {
         });
     };
 
+    const buttonElement = (btn, i) => {
+        return <Button
+            key={i}
+            className={btn === "=" ? "equals" : ""}
+            value={btn}
+            onClick={
+                btn === "C"
+                    ? resetClickHandler
+                    : btn === "^"
+                        ? signClickHandler
+                        : btn === "%"
+                            ? percentClickHandler
+                            : btn === "="
+                                ? equalsClickHandler
+                                : btn === "/" || btn === "X" || btn === "-" || btn === "+"
+                                    ? signClickHandler
+                                    : btn === "."
+                                        ? comaClickHandler
+                                        : numClickHandler
+            }
+        />;
+    }
+
     return (
         <Wrapper>
             <form>
@@ -134,26 +156,7 @@ const App = () => {
             <ButtonBox>
                 {btnValues.flat().map((btn, i) => {
                     return (
-                        <Button
-                            key={i}
-                            className={btn === "=" ? "equals" : ""}
-                            value={btn}
-                            onClick={
-                                btn === "C"
-                                    ? resetClickHandler
-                                    : btn === "^"
-                                        ? signClickHandler
-                                        : btn === "%"
-                                            ? percentClickHandler
-                                            : btn === "="
-                                                ? equalsClickHandler
-                                                : btn === "/" || btn === "X" || btn === "-" || btn === "+"
-                                                    ? signClickHandler
-                                                    : btn === "."
-                                                        ? comaClickHandler
-                                                        : numClickHandler
-                            }
-                        />
+                        buttonElement(btn, i)
                     );
                 })}
             </ButtonBox>
