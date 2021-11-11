@@ -115,27 +115,28 @@ const App = () => {
         });
     };
 
-    const buttonElement = (btn, i) => {
-        return <Button
-            key={i}
-            className={btn === "=" ? "equals" : ""}
-            value={btn}
-            onClick={
-                btn === "C"
-                    ? resetClickHandler
-                    : btn === "^"
-                        ? signClickHandler
-                        : btn === "%"
-                            ? percentClickHandler
-                            : btn === "="
-                                ? equalsClickHandler
-                                : btn === "/" || btn === "X" || btn === "-" || btn === "+"
-                                    ? signClickHandler
-                                    : btn === "."
-                                        ? comaClickHandler
-                                        : numClickHandler
-            }
-        />;
+    const handleButtonClick = (btn) => {
+        return btn === "C"
+            ? resetClickHandler
+            : btn === "^"
+                ? signClickHandler
+                : btn === "%"
+                    ? percentClickHandler
+                    : btn === "="
+                        ? equalsClickHandler
+                        : btn === "/" || btn === "X" || btn === "-" || btn === "+"
+                            ? signClickHandler
+                            : btn === "."
+                                ? comaClickHandler
+                                : numClickHandler;
+    }
+
+    const inputOnKeyDown = (e) => {
+        e.preventDefault();
+        const value = e.key;
+        if (!isNaN(value)) {
+            numClickHandler(e)
+        }
     }
 
     return (
@@ -145,18 +146,19 @@ const App = () => {
                     <input className="screen" type="text" name="name" tabIndex="-1"
                            value={calc.num ? calc.num : calc.res}
                            onKeyDown={((e) => {
-                               e.preventDefault();
-                               const value = e.key;
-                               if (!isNaN(value)) {
-                                   numClickHandler(e)
-                               }
+                               inputOnKeyDown(e)
                            })}/>
                 </label>
             </form>
             <ButtonBox>
                 {btnValues.flat().map((btn, i) => {
                     return (
-                        buttonElement(btn, i)
+                        <Button
+                            key={i}
+                            className={btn === "=" ? "equals" : ""}
+                            value={btn}
+                            onClick={handleButtonClick(btn)}
+                        />
                     );
                 })}
             </ButtonBox>
