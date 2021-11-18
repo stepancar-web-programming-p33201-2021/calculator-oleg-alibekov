@@ -28,9 +28,7 @@ const App = () => {
 
     const numClickHandler = (e) => {
         e.preventDefault();
-
-        const value = e.type === 'click' ? e.target.innerHTML : e.key;
-
+        const value =  e.target.innerHTML;
         if (removeSpaces(calc.num).length < 16) {
             setCalc({
                 ...calc,
@@ -135,7 +133,18 @@ const App = () => {
         e.preventDefault();
         const value = e.key;
         if (!isNaN(value)) {
-            numClickHandler(e)
+            if (removeSpaces(calc.num).length < 16) {
+                setCalc({
+                    ...calc,
+                    num:
+                        calc.num === 0 && value === "0"
+                            ? "0"
+                            : removeSpaces(calc.num) % 1 === 0
+                                ? toLocaleString(Number(removeSpaces(calc.num + value)))
+                                : toLocaleString(calc.num + value),
+                    res: !calc.sign ? 0 : calc.res,
+                });
+            }
         }
     }
 
